@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { loginWithEmail } from "./api";
+import { loginWithPassword, registerAccount } from "./api";
+import { useAuth } from "./AuthContext";
 
 interface LoginModalProps {
   onClose: () => void;
@@ -7,26 +8,34 @@ interface LoginModalProps {
 }
 
 export default function LoginModal({ onClose, onSuccess }: LoginModalProps) {
+  const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
-  const [sending, setSending] = useState(false);
-  const [magicLink, setMagicLink] = useState<string | null>(null);
+  const [password, setPassword] = useState("");
+  const [businessName, setBusinessName] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { refresh } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSending(true);
+    setLoading(true);
     try {
-      const result = await loginWithEmail(email);
-      if (result.ok && result.magicLink) {
-        setMagicLink(result.magicLink);
+      const result = mode === "login"
+        ? await loginWithPassword(email, password)
+        : await registerAccount(email, password, businessName);
+
+      if (result.ok) {
+        await refresh();
+        onSuccess?.();
+        onClose();
       } else {
         setError(result.error || "Something went wrong");
       }
     } catch {
       setError("Network error");
     } finally {
-      setSending(false);
+      setLoading(false);
     }
   };
 
@@ -34,35 +43,48 @@ export default function LoginModal({ onClose, onSuccess }: LoginModalProps) {
     <div className="lp-modal-backdrop" onClick={onClose}>
       <div className="lp-modal" onClick={(e) => e.stopPropagation()}>
         <button className="lp-modal-close" onClick={onClose} aria-label="Close">&times;</button>
-        <h2 className="lp-modal-title">Sign In</h2>
-        {!magicLink ? (
-          <form onSubmit={handleSubmit}>
-            <p className="lp-modal-desc">Enter your email to receive a magic sign-in link. No password needed!</p>
+        <h2 className="lp-modal-title">{mode === "login" ? "Sign In" : "Create Account"}</h2>
+        <form onSubmit={handleSubmit}>
+          {mode === "register" && (
             <input
-              type="email"
+              type="text"
               className="lp-input"
-              placeholder="you@business.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              placeholder="Business name"
+              value={businessName}
+              onChange={(e) => setBusinessName(e.target.value)}
               autoFocus
             />
-            {error && <p className="lp-error">{error}</p>}
-            <button type="submit" className="lp-btn lp-btn-primary" disabled={sending}>
-              {sending ? "Sending..." : "Send Magic Link"}
-            </button>
-          </form>
-        ) : (
-          <div>
-            <p className="lp-modal-desc">
-              ✨ Magic link generated! In production this would be emailed. For now, click below:
-            </p>
-            <a href={magicLink} className="lp-btn lp-btn-primary" style={{ display: "block", textAlign: "center", textDecoration: "none" }}>
-              Sign In Now
-            </a>
-            <p className="lp-modal-hint">Link expires in 15 minutes.</p>
-          </div>
-        )}
+          )}
+          <input
+            type="email"
+            className="lp-input"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoFocus={mode === "login"}
+          />
+          <input
+            type="password"
+            className="lp-input"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength={6}
+          />
+          {error && <p className="lp-error">{error}</p>}
+          <button type="submit" className="lp-btn lp-btn-primary" disabled={loading}>
+            {loading ? "Please wait..." : mode === "login" ? "Sign In" : "Create Account"}
+          </button>
+        </form>
+        <p className="lp-modal-switch">
+          {mode === "login" ? (
+            <>Don't have an account? <button type="button" className="lp-link-btn" onClick={() => { setMode("register"); setError(""); }}>Create one</button></>
+          ) : (
+            <>Already have an account? <button type="button" className="lp-link-btn" onClick={() => { setMode("login"); setError(""); }}>Sign in</button></>
+          )}
+        </p>
       </div>
     </div>
   );

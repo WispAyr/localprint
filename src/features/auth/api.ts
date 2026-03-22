@@ -28,22 +28,31 @@ export interface DesignSummary {
 }
 
 export interface DesignFull extends DesignSummary {
-  state: any;
+  state: Record<string, unknown>;
   user_id: string;
+}
+
+export async function loginWithPassword(email: string, password: string): Promise<{ ok: boolean; user?: AuthUser; error?: string }> {
+  const res = await fetch("/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+  return res.json();
+}
+
+export async function registerAccount(email: string, password: string, businessName: string): Promise<{ ok: boolean; user?: AuthUser; error?: string }> {
+  const res = await fetch("/api/auth/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password, businessName }),
+  });
+  return res.json();
 }
 
 export async function fetchMe(): Promise<{ user: AuthUser; brand: BrandProfile | null } | null> {
   const res = await fetch("/api/auth/me");
   if (!res.ok) return null;
-  return res.json();
-}
-
-export async function loginWithEmail(email: string): Promise<{ ok: boolean; magicLink?: string; error?: string }> {
-  const res = await fetch("/api/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email }),
-  });
   return res.json();
 }
 
@@ -55,66 +64,62 @@ export async function fetchDesigns(): Promise<DesignSummary[]> {
   const res = await fetch("/api/designs");
   if (!res.ok) return [];
   const data = await res.json();
-  return data.designs;
+  return data.designs || data || [];
 }
 
 export async function fetchDesign(id: string): Promise<DesignFull | null> {
   const res = await fetch("/api/designs/" + id);
   if (!res.ok) return null;
-  const data = await res.json();
-  return data.design;
+  return res.json();
 }
 
-export async function createDesign(name: string, description: string, state: any, thumbnail?: string): Promise<DesignSummary | null> {
-  const res = await fetch("/api/designs", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, description, state, thumbnail }),
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.design;
-}
-
-export async function updateDesign(id: string, updates: { name?: string; description?: string; state?: any; thumbnail?: string }): Promise<DesignSummary | null> {
+export async function saveDesign(id: string, data: { name?: string; description?: string; state?: Record<string, unknown>; thumbnail?: string }): Promise<{ ok: boolean }> {
   const res = await fetch("/api/designs/" + id, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updates),
+    body: JSON.stringify(data),
   });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.design;
+  return res.json();
 }
 
-export async function deleteDesign(id: string): Promise<boolean> {
+export async function createDesign(data: { name: string; description?: string; state: Record<string, unknown> }): Promise<{ ok: boolean; design?: DesignFull; error?: string }> {
+  const res = await fetch("/api/designs", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function deleteDesign(id: string): Promise<{ ok: boolean }> {
   const res = await fetch("/api/designs/" + id, { method: "DELETE" });
-  return res.ok;
+  return res.json();
 }
 
-export async function duplicateDesign(id: string): Promise<DesignSummary | null> {
+export async function duplicateDesign(id: string): Promise<{ ok: boolean; design?: DesignFull }> {
   const res = await fetch("/api/designs/" + id + "/duplicate", { method: "POST" });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.design;
+  return res.json();
 }
 
-export async function updateBrand(brand: Partial<BrandProfile>): Promise<BrandProfile | null> {
+// Keep old export name for compatibility
+export const loginWithEmail = loginWithPassword;
+
+export async function updateBrand(data: Partial<BrandProfile>): Promise<{ ok: boolean }> {
   const res = await fetch("/api/brand", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(brand),
+    body: JSON.stringify(data),
   });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.brand;
+  return res.json();
 }
 
-export async function uploadLogo(file: File): Promise<string | null> {
+export async function uploadLogo(file: File): Promise<{ ok: boolean; path?: string }> {
   const form = new FormData();
   form.append("logo", file);
   const res = await fetch("/api/brand/logo", { method: "POST", body: form });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.logoPath;
+  return res.json();
+}
+
+export async function updateDesign(id: string, data: { name?: string; description?: string; state?: Record<string, unknown>; thumbnail?: string }): Promise<{ ok: boolean }> {
+  return saveDesign(id, data);
 }
