@@ -26,6 +26,8 @@ export function useDesignLoader() {
   const { dispatch, mapRef } = usePosterContext();
 
   const loadDesignIntoEditor = useCallback(async (designId: string) => {
+    // Suppress geolocation from overwriting design coordinates
+    (window as any).__localprint_design_loading = true;
     const result = await fetchDesign(designId);
     if (!result?.state) return null;
     const s = result.state as any;

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && ln -sf /root/localprint/uploads dist/uploads",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "showcase:grid": "node scripts/combine-showcase-grid.mjs"

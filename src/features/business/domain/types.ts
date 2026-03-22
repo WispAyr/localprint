@@ -64,7 +64,7 @@ export const DEFAULT_BUSINESS_BRANDING: BusinessBranding = {
   qrUrl: "",
   qrPosition: "bottom-right",
   qrSize: "small",
-  showBusinessMarker: true,
+  showBusinessMarker: false,
   brandPrimary: "#1E3A5F",
   brandSecondary: "#FFFFFF",
   brandAccent: "#4A90D9",

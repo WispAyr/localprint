@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   DEFAULT_LAT,
   DEFAULT_LON,
@@ -11,13 +11,16 @@ import { reverseGeocodeCoordinates } from "@/core/services";
 
 /**
  * Initializes map start position from browser geolocation.
- * Falls back to Hanover coordinates when geolocation is unavailable or denied.
+ * Skips if a location has already been set (e.g. from a loaded design).
  */
-export function useGeolocation(dispatch: React.Dispatch<PosterAction>) {
+export function useGeolocation(dispatch: React.Dispatch<PosterAction>, skipGeolocation = false) {
+  const hasApplied = useRef(false);
+
   useEffect(() => {
+    if (skipGeolocation || hasApplied.current) return;
+    hasApplied.current = true;
+
     let cancelled = false;
-    const defaultLocationLabel =
-      "Hanover, Region Hannover, Lower Saxony, Germany";
 
     const applyFallback = () => {
       if (cancelled) return;
@@ -26,7 +29,7 @@ export function useGeolocation(dispatch: React.Dispatch<PosterAction>) {
         type: "SET_FORM_FIELDS",
         resetDisplayNameOverrides: true,
         fields: {
-          location: defaultLocationLabel,
+          location: "Ayr, South Ayrshire, Scotland",
           latitude: DEFAULT_LAT.toFixed(6),
           longitude: DEFAULT_LON.toFixed(6),
           displayCity: DEFAULT_CITY,
@@ -71,7 +74,6 @@ export function useGeolocation(dispatch: React.Dispatch<PosterAction>) {
         void reverseGeocodeCoordinates(lat, lon)
           .then((nearest) => {
             if (cancelled) return;
-
             const city = String(nearest.city ?? "").trim();
             const country = String(nearest.country ?? "").trim();
             const label =
@@ -92,9 +94,7 @@ export function useGeolocation(dispatch: React.Dispatch<PosterAction>) {
             });
             dispatch({ type: "SET_USER_LOCATION", location: nearest });
           })
-          .catch(() => {
-            // Keep coordinate update even when reverse lookup fails.
-          });
+          .catch(() => {});
       },
       () => {
         applyFallback();
@@ -109,5 +109,5 @@ export function useGeolocation(dispatch: React.Dispatch<PosterAction>) {
     return () => {
       cancelled = true;
     };
-  }, [dispatch]);
+  }, [dispatch, skipGeolocation]);
 }

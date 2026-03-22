@@ -1,0 +1,180 @@
+.batch-generator {
+  padding: 0.5rem 0;
+  font-size: 0.85rem;
+}
+
+.batch-description {
+  color: var(--text-secondary, #999);
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.batch-empty {
+  color: var(--text-secondary, #999);
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.batch-empty .batch-hint {
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.batch-select-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.batch-link-btn {
+  background: none;
+  border: none;
+  color: var(--accent, #4ea8de);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.batch-link-btn:hover {
+  opacity: 0.8;
+}
+
+.batch-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.batch-group-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.batch-group-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.batch-group-item input[type="checkbox"] {
+  margin-top: 2px;
+  accent-color: var(--accent, #4ea8de);
+}
+
+.batch-group-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.batch-group-title {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.batch-group-markers {
+  color: var(--text-secondary, #999);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.batch-center-preview {
+  color: var(--text-secondary, #777);
+  font-size: 0.7rem;
+  font-family: monospace;
+}
+
+.batch-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.batch-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.batch-field span:first-child {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary, #999);
+}
+
+.batch-field input {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 0.5rem 0.6rem;
+  color: inherit;
+  font-size: 0.85rem;
+}
+
+.batch-field input:focus {
+  outline: none;
+  border-color: var(--accent, #4ea8de);
+}
+
+.batch-hint {
+  font-size: 0.7rem;
+  color: var(--text-secondary, #777);
+}
+
+.batch-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.batch-save-btn {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent, #4ea8de);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.batch-save-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.batch-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.batch-result {
+  margin-top: 0.75rem;
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.batch-result--success {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.batch-result--error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}

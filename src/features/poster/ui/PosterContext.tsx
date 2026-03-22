@@ -123,8 +123,12 @@ export function PosterProvider({ children }: { children: ReactNode }) {
   const lastSyncedMarkerThemeColorRef = useRef<string | null>(null);
   const hasLoadedCustomIconsRef = useRef(false);
 
-  // Set initial position from browser geolocation (or Hanover fallback)
-  useGeolocation(dispatch);
+  // Skip geolocation if a design is being loaded (URL param or sidebar click)
+  const skipGeo = Boolean(
+    new URLSearchParams(window.location.search).get("design") ||
+    (window as any).__localprint_design_loading
+  );
+  useGeolocation(dispatch, skipGeo);
 
   const selectedTheme = useMemo(
     () => getTheme(state.form.theme),
