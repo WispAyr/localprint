@@ -1,0 +1,158 @@
+/* ────── Business Branding Section ────── */
+
+.business-branding-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.business-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.business-field-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+
+.business-field-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.business-field-row-pair {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.business-logo-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.business-file-input {
+  font-size: 0.8rem;
+}
+
+.business-logo-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.business-logo-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: rgba(128, 128, 128, 0.1);
+  padding: 4px;
+}
+
+.business-remove-btn {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid rgba(255, 80, 80, 0.4);
+  border-radius: 4px;
+  background: transparent;
+  color: #e55;
+  cursor: pointer;
+}
+
+.business-remove-btn:hover {
+  background: rgba(255, 80, 80, 0.1);
+}
+
+.business-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.business-toggle-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* ────── Brand Colour Pickers ────── */
+
+.brand-color-pickers {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.brand-color-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 70px;
+}
+
+.brand-color-field label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  opacity: 0.7;
+}
+
+.brand-color-field input[type="color"] {
+  width: 40px;
+  height: 32px;
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 2px;
+  background: transparent;
+}
+
+.brand-color-hex {
+  font-size: 0.65rem;
+  font-family: monospace;
+  opacity: 0.6;
+}
+
+.brand-apply-btn {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #4A90D9, #357ABD);
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.brand-apply-btn:hover {
+  opacity: 0.85;
+}
+
+/* ────── Business Overlay (on poster) ────── */
+
+.business-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  container-type: size;
+}
+
+.business-center-marker {
+  line-height: 1;
+}
