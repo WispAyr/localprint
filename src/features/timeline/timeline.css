@@ -1,0 +1,54 @@
+.timeline-bar {
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  bottom: 18%;
+  display: flex;
+  border-radius: 0.6cqmin;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 5;
+  container-type: inline-size;
+}
+
+.timeline-day {
+  flex: 1;
+  padding: 0.5cqmin 0.3cqmin;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  min-width: 0;
+}
+
+.timeline-day:last-child {
+  border-right: none;
+}
+
+.timeline-day-header {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 1.1cqmin;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3cqmin;
+  opacity: 0.95;
+}
+
+.timeline-stop {
+  margin-top: 0.2cqmin;
+}
+
+.timeline-stop-name {
+  display: block;
+  font-weight: 500;
+  font-size: 0.9cqmin;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timeline-stop-time {
+  display: block;
+  font-size: 0.75cqmin;
+  color: rgba(255, 255, 255, 0.65);
+}

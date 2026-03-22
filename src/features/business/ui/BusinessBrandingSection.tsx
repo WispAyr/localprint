@@ -345,6 +345,18 @@ export default function BusinessBrandingSection({
         )}
       </div>
 
+      {/* Timeline Bar */}
+      <div className="business-field-group">
+        <label className="business-field-label business-checkbox-label">
+          <input
+            type="checkbox"
+            checked={branding.showTimeline ?? false}
+            onChange={(e) => onChange({ showTimeline: e.target.checked })}
+          />
+          Show Timeline Bar
+        </label>
+      </div>
+
       {/* Brand Colours */}
       <div className="business-field-group">
         <label className="business-field-label">Brand Colours</label>

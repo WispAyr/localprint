@@ -12,6 +12,7 @@ import {
   MIN_MARKER_SIZE,
 } from "@/features/markers/infrastructure/constants";
 import { clamp } from "@/shared/geo/math";
+import { resolveLabels } from "@/features/markers/infrastructure/labelCollision";
 
 interface MarkerOverlayProps {
   markers: MarkerItem[];
@@ -494,7 +495,14 @@ export default function MarkerOverlay({
         >
           <MarkerVisual icon={icon} size={marker.size} color={marker.color} />
           {(marker.title || marker.label) && (
-            <span className="poster-marker-label" style={{ color: marker.color }}>
+            <span className="poster-marker-label" style={{
+              color: marker.color,
+              transform: `translate(\${labelPlacements[idx]?.dx ?? 0}px, \${labelPlacements[idx]?.dy ?? 0}px)`,
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              whiteSpace: 'nowrap',
+            }}>
               <span className="poster-marker-label-title">{marker.title || marker.label}</span>
               {marker.day && marker.time && (
                 <span className="poster-marker-label-time">{marker.day.slice(0,3)} {marker.time}</span>

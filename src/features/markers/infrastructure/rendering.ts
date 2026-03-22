@@ -4,6 +4,7 @@ import type {
   MarkerProjectionInput,
 } from "@/features/markers/domain/types";
 import { projectMarkerToCanvas } from "./projection";
+import { resolveLabels, type LabelPlacement } from "./labelCollision";
 
 function serializeSvgWithColor(svgMarkup: string, color: string) {
   return svgMarkup.split("currentColor").join(color);

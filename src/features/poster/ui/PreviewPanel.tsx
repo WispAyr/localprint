@@ -13,6 +13,7 @@ import GradientFades from "./GradientFades";
 import PosterTextOverlay from "./PosterTextOverlay";
 import BusinessOverlay from "@/features/business/ui/BusinessOverlay";
 import SettingsInfo from "./SettingsInfo";
+import TimelineBar from "@/features/timeline/TimelineBar";
 import MapPrimaryControls from "./MapPrimaryControls";
 import {
   PlusIcon,
@@ -441,6 +442,9 @@ export default function PreviewPanel() {
             fontFamily={form.fontFamily}
             textColor={effectiveTheme.ui.text}
           />
+          {state.businessBranding.showTimeline && state.markers.length > 0 && (
+            <TimelineBar markers={state.markers} fontFamily={form.fontFamily} />
+          )}
           <PosterTextOverlay
             city={cityLabel}
             country={countryLabel}

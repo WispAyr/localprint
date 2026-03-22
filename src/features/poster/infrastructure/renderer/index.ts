@@ -91,6 +91,7 @@ export async function compositeExport(
       options.businessBranding,
       options.fontFamily,
       theme.ui.text,
+      options.markers,
     );
   }
 

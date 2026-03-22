@@ -49,6 +49,9 @@ export interface BusinessBranding {
   showBusinessMarker: boolean;
   showBusinessName: boolean;
 
+  /** Show timeline schedule bar */
+  showTimeline: boolean;
+
   /** Brand colours */
   brandPrimary: string;
   brandSecondary: string;
@@ -67,6 +70,7 @@ export const DEFAULT_BUSINESS_BRANDING: BusinessBranding = {
   qrSize: "small",
   showBusinessMarker: false,
   showBusinessName: true,
+  showTimeline: false,
   brandPrimary: "#1E3A5F",
   brandSecondary: "#FFFFFF",
   brandAccent: "#4A90D9",
