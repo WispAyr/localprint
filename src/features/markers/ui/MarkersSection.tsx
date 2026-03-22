@@ -460,18 +460,40 @@ export default function MarkersSection() {
 
       <div className="markers-section__content">
         {!isMarkerEditorActive && !isSettingsOpen ? (
-          <MarkerPicker
-            markerColor={markerDefaults.color}
-            customIcons={customMarkerIcons}
-            onIconClick={addMarker}
-            onUploadIcon={handleUploadIcon}
-            onRemoveUploadedIcon={(iconId) =>
-              dispatch({ type: "REMOVE_CUSTOM_MARKER_ICON", iconId })
-            }
-            onClearUploadedIcons={() =>
-              dispatch({ type: "CLEAR_CUSTOM_MARKER_ICONS" })
-            }
-          />
+          <>
+            <MarkerPicker
+              markerColor={markerDefaults.color}
+              customIcons={customMarkerIcons}
+              onIconClick={addMarker}
+              onUploadIcon={handleUploadIcon}
+              onRemoveUploadedIcon={(iconId) =>
+                dispatch({ type: "REMOVE_CUSTOM_MARKER_ICON", iconId })
+              }
+              onClearUploadedIcons={() =>
+                dispatch({ type: "CLEAR_CUSTOM_MARKER_ICONS" })
+              }
+            />
+            {hasMarkers ? (
+              <div className="marker-data-layer">
+                <div className="marker-data-layer__header">
+                  <span className="marker-data-layer__title">Markers ({markers.length})</span>
+                </div>
+                <div className="marker-data-layer__list">
+                  {markerRows.map(({ marker, icon }) => (
+                    <div key={marker.id} className="marker-data-row" onClick={() => { toggleMarkerEditMode(); setTimeout(() => openMarkerEditor(marker.id), 50); }}>
+                      <span className="marker-data-row__icon">
+                        {icon ? <MarkerVisual icon={icon} size={18} color={marker.color} /> : null}
+                      </span>
+                      <span className="marker-data-row__name">{marker.title || marker.label || "Untitled"}</span>
+                      {marker.day ? <span className="marker-data-row__day">{marker.day.slice(0,3)}</span> : null}
+                      {marker.time ? <span className="marker-data-row__time">{marker.time}</span> : null}
+                      <button type="button" className="marker-data-row__delete" onClick={(e) => { e.stopPropagation(); removeMarker(marker.id); }} title="Delete">×</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </>
         ) : null}
 
         {!isMarkerEditorActive && isSettingsOpen ? (

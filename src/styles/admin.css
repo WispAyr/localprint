@@ -643,3 +643,113 @@ button.designs-sidebar-toggle.is-active {
   opacity: 0.85;
   line-height: 1.2;
 }
+
+/* ── Marker Data Layer ── */
+.marker-data-layer {
+  margin-top: 12px;
+  border: 1px solid rgba(146, 176, 200, 0.12);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(9, 18, 27, 0.5);
+}
+
+.marker-data-layer__header {
+  padding: 8px 12px;
+  background: rgba(146, 176, 200, 0.06);
+  border-bottom: 1px solid rgba(146, 176, 200, 0.08);
+}
+
+.marker-data-layer__title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #8ca8bc;
+}
+
+.marker-data-layer__list {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.marker-data-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background 0.1s;
+  border-bottom: 1px solid rgba(146, 176, 200, 0.05);
+}
+
+.marker-data-row:last-child {
+  border-bottom: none;
+}
+
+.marker-data-row:hover {
+  background: rgba(146, 176, 200, 0.08);
+}
+
+.marker-data-row__icon {
+  flex-shrink: 0;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marker-data-row__name {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e6edf4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.marker-data-row__day {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  color: #4a90d9;
+  background: rgba(74, 144, 217, 0.12);
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.marker-data-row__time {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: #8ca8bc;
+  white-space: nowrap;
+}
+
+.marker-data-row__delete {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: none !important;
+  background: none !important;
+  color: #666 !important;
+  font-size: 14px !important;
+  cursor: pointer;
+  padding: 0 !important;
+  line-height: 1;
+  border-radius: 4px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.1s, color 0.1s;
+}
+
+.marker-data-row:hover .marker-data-row__delete {
+  opacity: 1;
+}
+
+.marker-data-row__delete:hover {
+  color: #e74c3c !important;
+}
