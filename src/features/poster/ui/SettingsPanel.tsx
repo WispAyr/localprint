@@ -33,6 +33,9 @@ import { GEOLOCATION_TIMEOUT_MS } from "@/features/map/infrastructure";
 import type { SearchResult } from "@/features/location/domain/types";
 import BusinessBrandingSection from "@/features/business/ui/BusinessBrandingSection";
 import "@/features/business/ui/business.css";
+import BatchGenerator from "@/features/batch/BatchGenerator";
+import "@/features/batch/batch.css";
+
 import { generateBrandTheme } from "@/features/business/infrastructure/brandThemeGenerator";
 import type { BusinessBranding } from "@/features/business/domain/types";
 import {
@@ -46,7 +49,8 @@ type SectionId =
   | "layout"
   | "layers"
   | "markers"
-  | "style";
+  | "style"
+  | "batch";
 
 const accordionSections: {
   id: SectionId;
@@ -59,6 +63,7 @@ const accordionSections: {
   { id: "layers", label: "Layers", Icon: LayersIcon },
   { id: "markers", label: "Markers", Icon: MarkersIcon },
   { id: "style", label: "Style", Icon: StyleIcon },
+  { id: "batch", label: "Batch", Icon: ({ className }: { className?: string }) => <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 7v10M12 7v10M16 7v10"/></svg> },
 ];
 
 export default function SettingsPanel({
@@ -390,6 +395,26 @@ export default function SettingsPanel({
                 onCreditsChange={handleCreditsChange}
               />
             ) : null}
+          </div>
+        </div>
+      </div>
+
+
+      <div
+        className={`mobile-section mobile-section--batch accordion-item${openSections.has("batch") ? " accordion-item--open" : ""}`}
+      >
+        <AccordionHeader
+          sectionId="batch"
+          label={accordionSections[6].label}
+          Icon={accordionSections[6].Icon}
+          isOpen={openSections.has("batch")}
+          onToggle={toggleSection}
+        />
+        <div
+          className={`accordion-body${openSections.has("batch") ? " is-open" : ""}`}
+        >
+          <div className="accordion-body-inner">
+            {!isAuxEditorActive ? <BatchGenerator /> : null}
           </div>
         </div>
       </div>
