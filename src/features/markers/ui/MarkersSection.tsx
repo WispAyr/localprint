@@ -35,6 +35,31 @@ import {
 } from "@/features/theme/domain/types";
 import { getThemeColorByPath } from "@/features/theme/domain/colorPaths";
 
+const DAY_OPTIONS = ["", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] as const;
+
+const DAY_COLORS: Record<string, string> = {
+  Monday: "#e74c3c",
+  Tuesday: "#e67e22",
+  Wednesday: "#f1c40f",
+  Thursday: "#2ecc71",
+  Friday: "#3498db",
+  Saturday: "#9b59b6",
+  Sunday: "#e91e63",
+};
+
+function buildMarkerLabel(marker: MarkerItem): string {
+  const parts: string[] = [];
+  if (marker.title) parts.push(marker.title);
+  if (marker.day && marker.time) {
+    parts.push(`— ${marker.day.slice(0,3)} ${marker.time}`);
+  } else if (marker.day) {
+    parts.push(`— ${marker.day.slice(0,3)}`);
+  } else if (marker.time) {
+    parts.push(`— ${marker.time}`);
+  }
+  return parts.join(" ") || marker.label || "";
+}
+
 function readFileAsDataUrl(file: File) {
   return new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
@@ -673,7 +698,7 @@ export default function MarkersSection() {
                                         color={marker.color}
                                       />
                                     ) : null}
-                                    <span className="marker-row__title">{markerLabel}</span>
+                                    <span className="marker-row__title">{marker.title || markerLabel}</span>
                                   </div>
 
                                   <div className="marker-row__actions">
@@ -710,6 +735,70 @@ export default function MarkersSection() {
 
                                 {isExpanded ? (
                                   <div className="marker-editor-card__details">
+                                    <div className="marker-editor-card__stack">
+                                      <label>
+                                        Title
+                                        <input
+                                          className="form-control-tall"
+                                          type="text"
+                                          placeholder="e.g. Moorfield"
+                                          value={marker.title ?? ""}
+                                          onChange={(event) =>
+                                            updateMarker(marker.id, {
+                                              title: event.target.value,
+                                              label: buildMarkerLabel({ ...marker, title: event.target.value }),
+                                            })
+                                          }
+                                        />
+                                      </label>
+                                      <div className="field-grid keep-two-mobile">
+                                        <label>
+                                          Day
+                                          <select
+                                            className="form-control-tall"
+                                            value={marker.day ?? ""}
+                                            onChange={(event) =>
+                                              updateMarker(marker.id, {
+                                                day: event.target.value || undefined,
+                                                label: buildMarkerLabel({ ...marker, day: event.target.value || undefined }),
+                                              })
+                                            }
+                                          >
+                                            {DAY_OPTIONS.map((d) => (
+                                              <option key={d} value={d}>{d || "—"}</option>
+                                            ))}
+                                          </select>
+                                        </label>
+                                        <label>
+                                          Time
+                                          <input
+                                            className="form-control-tall"
+                                            type="text"
+                                            placeholder="e.g. 5pm - 7pm"
+                                            value={marker.time ?? ""}
+                                            onChange={(event) =>
+                                              updateMarker(marker.id, {
+                                                time: event.target.value || undefined,
+                                                label: buildMarkerLabel({ ...marker, time: event.target.value || undefined }),
+                                              })
+                                            }
+                                          />
+                                        </label>
+                                      </div>
+                                      <label>
+                                        Subtitle
+                                        <input
+                                          className="form-control-tall"
+                                          type="text"
+                                          placeholder="e.g. at the Co-op"
+                                          value={marker.subtitle ?? ""}
+                                          onChange={(event) =>
+                                            updateMarker(marker.id, { subtitle: event.target.value || undefined })
+                                          }
+                                        />
+                                      </label>
+                                    </div>
+
                                     <div className="field-grid keep-two-mobile">
                                       <label>
                                         Latitude

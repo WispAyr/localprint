@@ -824,6 +824,31 @@
           "outline": "#F4F0EA"
         }
       }
+    },
+    "joannas_blue": {
+      "name": "Joanna's Blue",
+      "description": "Custom brand theme for Joanna's Chippy Van - deep blue with white roads",
+      "ui": {
+        "bg": "#1a5fb4",
+        "text": "#ffffff"
+      },
+      "map": {
+        "land": "#1a5fb4",
+        "water": "#0d3d7a",
+        "waterway": "#0d3d7a",
+        "parks": "#1565c0",
+        "buildings": "#1259a8",
+        "aeroway": "#1565c0",
+        "rail": "#ffffff",
+        "roads": {
+          "major": "#ffffff",
+          "minor_high": "#e8e8e8",
+          "minor_mid": "#d0d0d0",
+          "minor_low": "#4080c8",
+          "path": "#3070b8",
+          "outline": "#0d3d7a"
+        }
+      }
     }
   }
 }

@@ -21,6 +21,11 @@ export interface MarkerItem {
   iconId: string;
   size: number;
   color: string;
+  label?: string;
+  title?: string;
+  day?: string;
+  time?: string;
+  subtitle?: string;
 }
 
 export interface MarkerDefaults {

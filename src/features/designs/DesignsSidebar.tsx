@@ -134,7 +134,7 @@ export default function DesignsSidebar({ isOpen, onClose, activeDesignId, onDesi
         <h3 className="designs-sidebar-title">My Designs</h3>
         <button className="designs-sidebar-close" onClick={onClose}>×</button>
       </div>
-      <button className="designs-sidebar-new" onClick={handleNew}>+ New Design</button>
+      <button className="designs-sidebar-new" onClick={handleNew}>+ New Map</button>
       <div className="designs-sidebar-list">
         {loading && <div className="designs-sidebar-empty">Loading...</div>}
         {!loading && designs.length === 0 && (

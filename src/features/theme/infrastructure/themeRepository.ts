@@ -129,6 +129,7 @@ const preferredThemeOrder = [
   "coastal",
   "urban",
   "botanical",
+  "joannas_blue",
 ];
 
 function isObject(value: unknown): value is ThemeObject {

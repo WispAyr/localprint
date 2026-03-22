@@ -228,7 +228,7 @@ function EditorShell() {
               onClick={() => setDesignsSidebarOpen(!designsSidebarOpen)}
               title="My Designs"
             >
-              📁
+              📁 My Maps
             </button>
           )}
           <SaveButton onLoginClick={() => setLoginOpen(true)} />
