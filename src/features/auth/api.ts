@@ -2,6 +2,7 @@ export interface AuthUser {
   id: string;
   email: string;
   business_name: string | null;
+  role?: string;
 }
 
 export interface BrandProfile {
@@ -70,7 +71,8 @@ export async function fetchDesigns(): Promise<DesignSummary[]> {
 export async function fetchDesign(id: string): Promise<DesignFull | null> {
   const res = await fetch("/api/designs/" + id);
   if (!res.ok) return null;
-  return res.json();
+  const data = await res.json();
+  return data.design || data;
 }
 
 export async function saveDesign(id: string, data: { name?: string; description?: string; state?: Record<string, unknown>; thumbnail?: string }): Promise<{ ok: boolean }> {

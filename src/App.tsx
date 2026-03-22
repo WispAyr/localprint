@@ -16,10 +16,10 @@ import { useSwipeDown } from "@/shared/hooks/useSwipeDown";
 import StartupLocationModal from "@/features/location/ui/StartupLocationModal";
 import { CheckIcon } from "@/shared/ui/Icons";
 import { useAuth } from "@/features/auth/AuthContext";
-import { fetchDesign } from "@/features/auth/api";
 import LoginModal from "@/features/auth/LoginModal";
 import UserMenu from "@/features/auth/UserMenu";
 import SaveButton from "@/features/auth/SaveButton";
+import DesignsSidebar, { useDesignLoader } from "@/features/designs/DesignsSidebar";
 
 const AboutModal = lazy(() => import("@/shared/ui/AboutModal"));
 const SettingsPanel = lazy(() => import("@/features/poster/ui/SettingsPanel"));
@@ -32,6 +32,14 @@ const DesktopLocationBar = lazy(() => import("@/shared/ui/DesktopLocationBar"));
 const DashboardPage = lazy(() => import("@/features/dashboard/DashboardPage"));
 const BrandPage = lazy(() => import("@/features/brand/BrandPage"));
 const VerifyPage = lazy(() => import("@/features/auth/VerifyPage"));
+
+// Admin pages
+const AdminLayout = lazy(() => import("@/features/admin/AdminLayout"));
+const AdminDashboard = lazy(() => import("@/features/admin/AdminDashboard"));
+const AdminUsers = lazy(() => import("@/features/admin/AdminUsers"));
+const AdminOrgs = lazy(() => import("@/features/admin/AdminOrgs"));
+const AdminDesigns = lazy(() => import("@/features/admin/AdminDesigns"));
+const AdminAuditLog = lazy(() => import("@/features/admin/AdminAuditLog"));
 
 function SettingsDrawer({
   mobileTab,
@@ -82,6 +90,9 @@ function EditorShell() {
 
   const [searchParams] = useSearchParams();
   const [loginOpen, setLoginOpen] = useState(false);
+  const [designsSidebarOpen, setDesignsSidebarOpen] = useState(false);
+  const [activeDesignId, setActiveDesignId] = useState<string | null>(null);
+  const { loadDesignIntoEditor } = useDesignLoader();
 
   // Mobile state
   const [mobileTab, setMobileTab] = useState<MobileTab>("theme");
@@ -102,33 +113,10 @@ function EditorShell() {
     const designId = searchParams.get("design");
     if (!designId || !user) return;
 
-    fetchDesign(designId).then((design) => {
-      if (!design?.state) return;
-      const s = design.state;
-      if (s.form) {
-        dispatch({ type: "SET_FORM_FIELDS", fields: s.form, resetDisplayNameOverrides: true });
-      }
-      if (s.customColors) {
-        dispatch({ type: "RESET_COLORS" });
-        Object.entries(s.customColors).forEach(([key, value]) => {
-          dispatch({ type: "SET_COLOR", key, value: value as string });
-        });
-      }
-      if (s.markers) {
-        dispatch({ type: "CLEAR_MARKERS" });
-        (s.markers as any[]).forEach((m) => dispatch({ type: "ADD_MARKER", marker: m }));
-      }
-      if (s.markerDefaults) {
-        dispatch({ type: "SET_MARKER_DEFAULTS", defaults: s.markerDefaults });
-      }
-      if (s.businessBranding) {
-        dispatch({ type: "SET_BUSINESS_BRANDING", changes: s.businessBranding });
-      }
-      if (s.customMarkerIcons) {
-        dispatch({ type: "SET_CUSTOM_MARKER_ICONS", icons: s.customMarkerIcons });
-      }
+    loadDesignIntoEditor(designId).then(() => {
+      setActiveDesignId(designId);
     });
-  }, [searchParams, user, dispatch]);
+  }, [searchParams, user, loadDesignIntoEditor]);
 
   useEffect(() => {
     const preload = () => {
@@ -234,11 +222,30 @@ function EditorShell() {
         data-desktop-tab={desktopTab}
       >
         <GeneralHeader onAboutOpen={() => setAboutOpen(true)}>
+          {user && (
+            <button
+              className={`designs-sidebar-toggle${designsSidebarOpen ? " is-active" : ""}`}
+              onClick={() => setDesignsSidebarOpen(!designsSidebarOpen)}
+              title="My Designs"
+            >
+              📁
+            </button>
+          )}
           <SaveButton onLoginClick={() => setLoginOpen(true)} />
           <UserMenu onLoginClick={() => setLoginOpen(true)} />
         </GeneralHeader>
         <InstallPrompt />
         <StartupLocationModal />
+
+        <DesignsSidebar
+          isOpen={designsSidebarOpen}
+          onClose={() => setDesignsSidebarOpen(false)}
+          activeDesignId={activeDesignId}
+          onDesignLoaded={(id) => {
+            setActiveDesignId(id);
+            setDesignsSidebarOpen(false);
+          }}
+        />
 
         <DesktopNavBar
           activeTab={desktopTab}
@@ -360,6 +367,17 @@ function EditorShell() {
 function AppShell() {
   return (
     <Routes>
+      <Route path="/admin" element={
+        <Suspense fallback={<div className="lp-page-center"><p>Loading...</p></div>}>
+          <AdminLayout />
+        </Suspense>
+      }>
+        <Route index element={<Suspense fallback={null}><AdminDashboard /></Suspense>} />
+        <Route path="users" element={<Suspense fallback={null}><AdminUsers /></Suspense>} />
+        <Route path="orgs" element={<Suspense fallback={null}><AdminOrgs /></Suspense>} />
+        <Route path="designs" element={<Suspense fallback={null}><AdminDesigns /></Suspense>} />
+        <Route path="audit" element={<Suspense fallback={null}><AdminAuditLog /></Suspense>} />
+      </Route>
       <Route path="/dashboard" element={
         <Suspense fallback={<div className="lp-page-center"><p>Loading...</p></div>}>
           <DashboardPage />

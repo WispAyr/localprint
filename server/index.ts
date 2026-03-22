@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth";
 import designRoutes from "./routes/designs";
 import brandRoutes from "./routes/brand";
 import uploadRoutes from "./routes/upload";
+import adminRoutes from "./routes/admin";
 
 const app = new Hono();
 
@@ -17,6 +18,7 @@ app.route("/api/auth", authRoutes);
 app.route("/api/designs", designRoutes);
 app.route("/api/brand", brandRoutes);
 app.route("/api/brand", uploadRoutes);
+app.route("/api/admin", adminRoutes);
 
 // Serve uploaded files
 app.use("/uploads/*", serveStatic({ root: "/root/localprint/" }));

@@ -36,6 +36,8 @@ export default function UserMenu({ onLoginClick }: UserMenuProps) {
     .map((w) => w[0]?.toUpperCase() || "")
     .join("");
 
+  const isAdmin = user.role === "admin" || user.role === "superadmin";
+
   return (
     <div className="lp-user-menu" ref={ref}>
       <button className="lp-avatar" onClick={() => setOpen(!open)} title={user.email}>
@@ -53,6 +55,14 @@ export default function UserMenu({ onLoginClick }: UserMenuProps) {
           <button className="lp-dropdown-item" onClick={() => { setOpen(false); navigate("/brand"); }}>
             Brand Profile
           </button>
+          {isAdmin && (
+            <>
+              <hr className="lp-dropdown-sep" />
+              <button className="lp-dropdown-item" onClick={() => { setOpen(false); navigate("/admin"); }}>
+                ⚙️ Admin Panel
+              </button>
+            </>
+          )}
           <hr className="lp-dropdown-sep" />
           <button className="lp-dropdown-item" onClick={() => { setOpen(false); navigate("/"); }}>
             Editor

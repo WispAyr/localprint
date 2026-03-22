@@ -38,6 +38,9 @@ auth.post("/login", async (c) => {
     return c.json({ error: "Invalid email or password" }, 401);
   }
 
+  // Update last_login_at
+  await pool.query("UPDATE users SET last_login_at = NOW() WHERE id = $1", [user.id]);
+
   // Create session (30 days)
   const sessionToken = nanoid(48);
   const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
@@ -111,9 +114,11 @@ auth.get("/me", async (c) => {
   if (!user) return c.json({ error: "Not authenticated" }, 401);
 
   const brand = await pool.query("SELECT * FROM brand_profiles WHERE user_id = $1", [user.id]);
+  const userDetails = await pool.query("SELECT role FROM users WHERE id = $1", [user.id]);
+  const role = userDetails.rows[0]?.role || "user";
 
   return c.json({
-    user: { id: user.id, email: user.email, business_name: user.business_name },
+    user: { id: user.id, email: user.email, business_name: user.business_name, role },
     brand: brand.rows[0] || null,
   });
 });
