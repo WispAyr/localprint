@@ -1,4 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from "react";
+import { Routes, Route, useSearchParams } from "react-router-dom";
 import { AppProviders } from "@/core/AppProviders";
 import { usePosterContext } from "@/features/poster/ui/PosterContext";
 import {
@@ -14,6 +15,11 @@ import InstallPrompt from "@/features/install/ui/InstallPrompt";
 import { useSwipeDown } from "@/shared/hooks/useSwipeDown";
 import StartupLocationModal from "@/features/location/ui/StartupLocationModal";
 import { CheckIcon } from "@/shared/ui/Icons";
+import { useAuth } from "@/features/auth/AuthContext";
+import { fetchDesign } from "@/features/auth/api";
+import LoginModal from "@/features/auth/LoginModal";
+import UserMenu from "@/features/auth/UserMenu";
+import SaveButton from "@/features/auth/SaveButton";
 
 const AboutModal = lazy(() => import("@/shared/ui/AboutModal"));
 const SettingsPanel = lazy(() => import("@/features/poster/ui/SettingsPanel"));
@@ -23,6 +29,9 @@ const AnnouncementModal = lazy(
 const DesktopExportFab = lazy(() => import("@/features/export/ui/DesktopExportFab"));
 const MobileExportFab = lazy(() => import("@/features/export/ui/MobileExportFab"));
 const DesktopLocationBar = lazy(() => import("@/shared/ui/DesktopLocationBar"));
+const DashboardPage = lazy(() => import("@/features/dashboard/DashboardPage"));
+const BrandPage = lazy(() => import("@/features/brand/BrandPage"));
+const VerifyPage = lazy(() => import("@/features/auth/VerifyPage"));
 
 function SettingsDrawer({
   mobileTab,
@@ -62,13 +71,17 @@ function SettingsDrawer({
   );
 }
 
-function AppShell() {
+function EditorShell() {
   const { state, dispatch } = usePosterContext();
+  const { user } = useAuth();
   const { isMarkerEditorActive } = state;
   const activeMarker =
     state.activeMarkerId !== null
       ? state.markers.find((marker) => marker.id === state.activeMarkerId) ?? null
       : null;
+
+  const [searchParams] = useSearchParams();
+  const [loginOpen, setLoginOpen] = useState(false);
 
   // Mobile state
   const [mobileTab, setMobileTab] = useState<MobileTab>("theme");
@@ -83,6 +96,40 @@ function AppShell() {
   const [desktopLocationRowVisible, setDesktopLocationRowVisible] =
     useState(true);
   const [aboutOpen, setAboutOpen] = useState(false);
+
+  // Load design from URL
+  useEffect(() => {
+    const designId = searchParams.get("design");
+    if (!designId || !user) return;
+
+    fetchDesign(designId).then((design) => {
+      if (!design?.state) return;
+      const s = design.state;
+      if (s.form) {
+        dispatch({ type: "SET_FORM_FIELDS", fields: s.form, resetDisplayNameOverrides: true });
+      }
+      if (s.customColors) {
+        dispatch({ type: "RESET_COLORS" });
+        Object.entries(s.customColors).forEach(([key, value]) => {
+          dispatch({ type: "SET_COLOR", key, value: value as string });
+        });
+      }
+      if (s.markers) {
+        dispatch({ type: "CLEAR_MARKERS" });
+        (s.markers as any[]).forEach((m) => dispatch({ type: "ADD_MARKER", marker: m }));
+      }
+      if (s.markerDefaults) {
+        dispatch({ type: "SET_MARKER_DEFAULTS", defaults: s.markerDefaults });
+      }
+      if (s.businessBranding) {
+        dispatch({ type: "SET_BUSINESS_BRANDING", changes: s.businessBranding });
+      }
+      if (s.customMarkerIcons) {
+        dispatch({ type: "SET_CUSTOM_MARKER_ICONS", icons: s.customMarkerIcons });
+      }
+    });
+  }, [searchParams, user, dispatch]);
+
   useEffect(() => {
     const preload = () => {
       void import("@/features/poster/ui/SettingsPanel");
@@ -180,124 +227,156 @@ function AppShell() {
   );
 
   return (
-    <div
-      className="app-shell"
-      data-mobile-tab={mobileTab}
-      data-desktop-tab={desktopTab}
-    >
-      <GeneralHeader onAboutOpen={() => setAboutOpen(true)} />
-      <InstallPrompt />
-      <StartupLocationModal />
-
-      <DesktopNavBar
-        activeTab={desktopTab}
-        panelOpen={desktopPanelOpen}
-        onTabChange={handleDesktopTabChange}
-        isLocationVisible={desktopLocationRowVisible}
-        onLocationToggle={() =>
-          setDesktopLocationRowVisible((isVisible) => !isVisible)
-        }
-      />
-
+    <>
       <div
-        className={`desktop-location-row-wrap${desktopLocationRowVisible ? "" : " is-hidden"}`}
+        className="app-shell"
+        data-mobile-tab={mobileTab}
+        data-desktop-tab={desktopTab}
       >
-        <Suspense fallback={null}>
-          <DesktopLocationBar />
-        </Suspense>
-      </div>
+        <GeneralHeader onAboutOpen={() => setAboutOpen(true)}>
+          <SaveButton onLoginClick={() => setLoginOpen(true)} />
+          <UserMenu onLoginClick={() => setLoginOpen(true)} />
+        </GeneralHeader>
+        <InstallPrompt />
+        <StartupLocationModal />
 
-      <div
-        className={`mobile-location-row-wrap${mobileLocationRowVisible ? "" : " is-hidden"}`}
-      >
-        <Suspense fallback={null}>
-          <DesktopLocationBar />
-        </Suspense>
-      </div>
-      {isMobileViewport && isMarkerEditorActive && activeMarker ? (
-        <div
-          className="mobile-marker-size-bar"
-          role="group"
-          aria-label="Selected marker size"
-        >
-          <p className="mobile-marker-size-bar__label">Marker Size</p>
-          <div className="mobile-marker-size-bar__controls">
-            <input
-              type="range"
-              className="mobile-marker-size-bar__slider map-control-slider"
-              min={MIN_MARKER_SIZE}
-              max={MAX_MARKER_SIZE}
-              step={1}
-              value={Math.round(activeMarker.size)}
-              onChange={(event) =>
-                handleMobileMarkerSizeChange(Number(event.target.value))
-              }
-            />
-            <span className="mobile-marker-size-bar__value">
-              {Math.round(activeMarker.size)}px
-            </span>
-          </div>
-        </div>
-      ) : null}
+        <DesktopNavBar
+          activeTab={desktopTab}
+          panelOpen={desktopPanelOpen}
+          onTabChange={handleDesktopTabChange}
+          isLocationVisible={desktopLocationRowVisible}
+          onLocationToggle={() =>
+            setDesktopLocationRowVisible((isVisible) => !isVisible)
+          }
+        />
 
-      <div className="desktop-left-panel">
         <div
-          className={`desktop-settings-slide${desktopPanelOpen ? " is-open" : ""}`}
+          className={`desktop-location-row-wrap${desktopLocationRowVisible ? "" : " is-hidden"}`}
         >
           <Suspense fallback={null}>
-            <SettingsPanel />
+            <DesktopLocationBar />
           </Suspense>
         </div>
+
+        <div
+          className={`mobile-location-row-wrap${mobileLocationRowVisible ? "" : " is-hidden"}`}
+        >
+          <Suspense fallback={null}>
+            <DesktopLocationBar />
+          </Suspense>
+        </div>
+        {isMobileViewport && isMarkerEditorActive && activeMarker ? (
+          <div
+            className="mobile-marker-size-bar"
+            role="group"
+            aria-label="Selected marker size"
+          >
+            <p className="mobile-marker-size-bar__label">Marker Size</p>
+            <div className="mobile-marker-size-bar__controls">
+              <input
+                type="range"
+                className="mobile-marker-size-bar__slider map-control-slider"
+                min={MIN_MARKER_SIZE}
+                max={MAX_MARKER_SIZE}
+                step={1}
+                value={Math.round(activeMarker.size)}
+                onChange={(event) =>
+                  handleMobileMarkerSizeChange(Number(event.target.value))
+                }
+              />
+              <span className="mobile-marker-size-bar__value">
+                {Math.round(activeMarker.size)}px
+              </span>
+            </div>
+          </div>
+        ) : null}
+
+        <div className="desktop-left-panel">
+          <div
+            className={`desktop-settings-slide${desktopPanelOpen ? " is-open" : ""}`}
+          >
+            <Suspense fallback={null}>
+              <SettingsPanel />
+            </Suspense>
+          </div>
+        </div>
+
+        <PreviewPanel />
+
+        {mobileDrawerOpen ? (
+          <SettingsDrawer
+            mobileTab={mobileTab}
+            onClose={() => setMobileDrawerOpen(false)}
+          />
+        ) : null}
+
+        {isMobileViewport && isMarkerEditorActive ? (
+          <button
+            type="button"
+            className="mobile-marker-edit-done"
+            onClick={() => {
+              dispatch({ type: "SET_MARKER_EDITOR_ACTIVE", active: false });
+              dispatch({ type: "SET_ACTIVE_MARKER", markerId: null });
+              setMobileDrawerOpen(false);
+            }}
+          >
+            <CheckIcon />
+            <span>Done Editing</span>
+          </button>
+        ) : null}
+
+        <MobileNavBar
+          activeTab={mobileTab}
+          drawerOpen={mobileDrawerOpen}
+          isLocationVisible={mobileLocationRowVisible}
+          onTabChange={handleMobileTabChange}
+        />
+        <Suspense fallback={null}>
+          <MobileExportFab />
+        </Suspense>
+
+        <FooterNote />
+        <Suspense fallback={null}>
+          <AnnouncementModal />
+        </Suspense>
+
+        <Suspense fallback={null}>
+          <DesktopExportFab />
+        </Suspense>
+        {aboutOpen ? (
+          <Suspense fallback={null}>
+            <AboutModal onClose={() => setAboutOpen(false)} />
+          </Suspense>
+        ) : null}
       </div>
 
-      <PreviewPanel />
+      {loginOpen && (
+        <LoginModal onClose={() => setLoginOpen(false)} />
+      )}
+    </>
+  );
+}
 
-      {mobileDrawerOpen ? (
-        <SettingsDrawer
-          mobileTab={mobileTab}
-          onClose={() => setMobileDrawerOpen(false)}
-        />
-      ) : null}
-
-      {isMobileViewport && isMarkerEditorActive ? (
-        <button
-          type="button"
-          className="mobile-marker-edit-done"
-          onClick={() => {
-            dispatch({ type: "SET_MARKER_EDITOR_ACTIVE", active: false });
-            dispatch({ type: "SET_ACTIVE_MARKER", markerId: null });
-            setMobileDrawerOpen(false);
-          }}
-        >
-          <CheckIcon />
-          <span>Done Editing</span>
-        </button>
-      ) : null}
-
-      <MobileNavBar
-        activeTab={mobileTab}
-        drawerOpen={mobileDrawerOpen}
-        isLocationVisible={mobileLocationRowVisible}
-        onTabChange={handleMobileTabChange}
-      />
-      <Suspense fallback={null}>
-        <MobileExportFab />
-      </Suspense>
-
-      <FooterNote />
-      <Suspense fallback={null}>
-        <AnnouncementModal />
-      </Suspense>
-
-      <Suspense fallback={null}>
-        <DesktopExportFab />
-      </Suspense>
-      {aboutOpen ? (
-        <Suspense fallback={null}>
-          <AboutModal onClose={() => setAboutOpen(false)} />
+function AppShell() {
+  return (
+    <Routes>
+      <Route path="/dashboard" element={
+        <Suspense fallback={<div className="lp-page-center"><p>Loading...</p></div>}>
+          <DashboardPage />
         </Suspense>
-      ) : null}
-    </div>
+      } />
+      <Route path="/brand" element={
+        <Suspense fallback={<div className="lp-page-center"><p>Loading...</p></div>}>
+          <BrandPage />
+        </Suspense>
+      } />
+      <Route path="/auth/verify/:token" element={
+        <Suspense fallback={<div className="lp-page-center"><p>Loading...</p></div>}>
+          <VerifyPage />
+        </Suspense>
+      } />
+      <Route path="*" element={<EditorShell />} />
+    </Routes>
   );
 }
 

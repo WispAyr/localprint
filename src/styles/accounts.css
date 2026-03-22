@@ -1,0 +1,524 @@
+/* ── Modal ── */
+.lp-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+}
+
+.lp-modal {
+  background: #1a1a2e;
+  color: #e0e0e0;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 420px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.lp-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.lp-modal-title {
+  margin: 0 0 16px;
+  font-size: 22px;
+  color: #fff;
+}
+
+.lp-modal-desc {
+  color: #aaa;
+  margin: 0 0 20px;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.lp-modal-hint {
+  color: #666;
+  font-size: 12px;
+  margin-top: 12px;
+  text-align: center;
+}
+
+/* ── Inputs ── */
+.lp-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #12121e;
+  color: #e0e0e0;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+}
+
+.lp-input:focus {
+  border-color: #4a90d9;
+}
+
+.lp-input-sm {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+/* ── Buttons ── */
+.lp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.lp-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lp-btn-primary {
+  background: #4a90d9;
+  color: #fff;
+}
+
+.lp-btn-primary:hover:not(:disabled) {
+  background: #3a7bc8;
+}
+
+.lp-btn-outline {
+  background: transparent;
+  color: #ccc;
+  border: 1px solid #444;
+}
+
+.lp-btn-outline:hover:not(:disabled) {
+  border-color: #666;
+  color: #fff;
+}
+
+.lp-btn-sm {
+  padding: 6px 14px;
+  font-size: 12px;
+}
+
+.lp-error {
+  color: #ef4444;
+  font-size: 13px;
+  margin: -4px 0 12px;
+}
+
+.lp-text-danger {
+  color: #ef4444 !important;
+}
+
+/* ── User Menu ── */
+.lp-user-menu {
+  position: relative;
+}
+
+.lp-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #4a90d9;
+  color: #fff;
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lp-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: #1a1a2e;
+  border: 1px solid #333;
+  border-radius: 12px;
+  min-width: 200px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  z-index: 9000;
+  overflow: hidden;
+}
+
+.lp-dropdown-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #2a2a3e;
+}
+
+.lp-dropdown-header strong {
+  display: block;
+  color: #fff;
+  font-size: 14px;
+}
+
+.lp-dropdown-header span {
+  display: block;
+  color: #888;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.lp-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  color: #ccc;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.lp-dropdown-item:hover {
+  background: #2a2a3e;
+  color: #fff;
+}
+
+.lp-dropdown-sep {
+  border: none;
+  border-top: 1px solid #2a2a3e;
+  margin: 0;
+}
+
+/* ── Save area ── */
+.lp-save-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lp-design-label {
+  color: #aaa;
+  font-size: 12px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lp-save-name-popup {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.lp-save-name-popup .lp-input {
+  margin-bottom: 0;
+  width: 180px;
+}
+
+/* ── Pages ── */
+.lp-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  min-height: 100vh;
+  color: #e0e0e0;
+}
+
+.lp-page-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #aaa;
+}
+
+.lp-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.lp-page-title {
+  margin: 0;
+  font-size: 28px;
+  color: #fff;
+}
+
+.lp-page-subtitle {
+  margin: 4px 0 0;
+  color: #888;
+  font-size: 14px;
+}
+
+.lp-page-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ── Design Grid ── */
+.lp-design-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.lp-design-card {
+  background: #1a1a2e;
+  border: 1px solid #2a2a3e;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+  position: relative;
+}
+
+.lp-design-card:hover {
+  border-color: #4a90d9;
+  transform: translateY(-2px);
+}
+
+.lp-design-thumb {
+  aspect-ratio: 3/4;
+  background: #12121e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.lp-design-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lp-design-thumb-placeholder {
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+.lp-design-info {
+  padding: 12px 14px;
+}
+
+.lp-design-name {
+  margin: 0;
+  font-size: 14px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lp-design-date {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.lp-design-menu-wrap {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.lp-design-menu-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lp-design-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  background: #1a1a2e;
+  border: 1px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+  min-width: 120px;
+  z-index: 100;
+}
+
+.lp-design-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 14px;
+  border: none;
+  background: none;
+  color: #ccc;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.lp-design-menu button:hover {
+  background: #2a2a3e;
+}
+
+.lp-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #888;
+}
+
+/* ── Brand Page ── */
+.lp-brand-form {
+  max-width: 600px;
+}
+
+.lp-brand-section {
+  margin-bottom: 32px;
+}
+
+.lp-brand-section h3 {
+  color: #fff;
+  font-size: 16px;
+  margin: 0 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #2a2a3e;
+}
+
+.lp-field {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.lp-field > span {
+  display: block;
+  color: #aaa;
+  font-size: 12px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lp-brand-logo-area {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.lp-brand-logo-preview {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #12121e;
+  border: 1px solid #333;
+}
+
+.lp-brand-logo-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  background: #12121e;
+  border: 1px dashed #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  font-size: 12px;
+}
+
+.lp-brand-colors {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.lp-color-field > span {
+  display: block;
+  color: #aaa;
+  font-size: 12px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lp-color-input-wrap {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.lp-color-input-wrap input[type="color"] {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  cursor: pointer;
+  background: none;
+  padding: 2px;
+}
+
+.lp-brand-actions {
+  padding-top: 16px;
+}
+
+/* ── Card ── */
+.lp-card {
+  background: #1a1a2e;
+  border-radius: 16px;
+  padding: 32px;
+}
+
+/* ── Back link ── */
+.lp-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #888;
+  font-size: 13px;
+  text-decoration: none;
+  margin-bottom: 16px;
+}
+
+.lp-back-link:hover {
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .lp-brand-colors {
+    grid-template-columns: 1fr;
+  }
+  .lp-design-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+  .lp-page-header {
+    flex-direction: column;
+  }
+}

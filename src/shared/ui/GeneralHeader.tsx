@@ -1,11 +1,13 @@
+import { type ReactNode } from "react";
 import { InfoIcon } from "@/shared/ui/Icons";
 import SocialLinkGroup from "@/shared/ui/SocialLinkGroup";
 
 interface GeneralHeaderProps {
   onAboutOpen: () => void;
+  children?: ReactNode;
 }
 
-export default function GeneralHeader({ onAboutOpen }: GeneralHeaderProps) {
+export default function GeneralHeader({ onAboutOpen, children }: GeneralHeaderProps) {
   return (
     <header className="general-header">
       <div className="desktop-brand">
@@ -23,6 +25,7 @@ export default function GeneralHeader({ onAboutOpen }: GeneralHeaderProps) {
       </div>
 
       <div className="general-header-actions">
+        {children}
         <SocialLinkGroup variant="header" />
         <button
           type="button"
