@@ -178,6 +178,116 @@ export default function BusinessBrandingSection({
         <label className="business-toggle-row">
           <input
             type="checkbox"
+            checked={branding.showBusinessName}
+            onChange={(e) =>
+              onChange({ showBusinessName: e.target.checked })
+            }
+          />
+          <span>Show business pin at map center</span>
+        </label>
+<label className="business-field-label">Business Logo</label>
+        <div className="business-logo-upload">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/png,image/jpeg,image/svg+xml"
+            onChange={handleLogoUpload}
+            className="business-file-input"
+          />
+          {branding.logoDataUrl && (
+            <div className="business-logo-preview">
+              <img
+                src={branding.logoDataUrl}
+                alt="Business logo"
+                className="business-logo-thumb"
+              />
+              <button
+                type="button"
+                className="business-remove-btn"
+                onClick={handleRemoveLogo}
+              >
+                Remove
+              </button>
+            </div>
+          )}
+        </div>
+        {branding.logoDataUrl && (
+          <>
+            <div className="business-field-row">
+              <label className="business-field-label">Logo Position</label>
+              <select
+                className="form-control-tall"
+                value={branding.logoPosition}
+                onChange={(e) =>
+                  onChange({ logoPosition: e.target.value as LogoPosition })
+                }
+              >
+                {LOGO_POSITIONS.map((p) => (
+                  <option key={p.value} value={p.value}>
+                    {p.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="business-field-row">
+              <label className="business-field-label">Logo Size</label>
+              <select
+                className="form-control-tall"
+                value={branding.logoSize}
+                onChange={(e) =>
+                  onChange({ logoSize: e.target.value as LogoSize })
+                }
+              >
+                {LOGO_SIZES.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Business Text Fields */}
+      <div className="business-field-group">
+        <label className="business-field-label">Business Name</label>
+        <input
+          className="form-control-tall"
+          type="text"
+          placeholder="Your Business Name"
+          value={branding.businessName}
+          onChange={(e) => onChange({ businessName: e.target.value })}
+        />
+      </div>
+
+      <div className="business-field-group">
+        <label className="business-field-label">Tagline / Subtitle</label>
+        <input
+          className="form-control-tall"
+          type="text"
+          placeholder="Your tagline here"
+          value={branding.tagline}
+          onChange={(e) => onChange({ tagline: e.target.value })}
+        />
+      </div>
+
+      <div className="business-field-group">
+        <label className="business-field-label">Address</label>
+        <input
+          className="form-control-tall"
+          type="text"
+          placeholder="123 Main Street, City"
+          value={branding.addressLine}
+          onChange={(e) => onChange({ addressLine: e.target.value })}
+        />
+      </div>
+
+      {/* Business Marker Toggle */}
+      <div className="business-field-group">
+        <label className="business-toggle-row">
+          <input
+            type="checkbox"
             checked={branding.showBusinessMarker}
             onChange={(e) =>
               onChange({ showBusinessMarker: e.target.checked })

@@ -47,6 +47,7 @@ export interface BusinessBranding {
 
   /** Show business marker at center */
   showBusinessMarker: boolean;
+  showBusinessName: boolean;
 
   /** Brand colours */
   brandPrimary: string;
@@ -65,6 +66,7 @@ export const DEFAULT_BUSINESS_BRANDING: BusinessBranding = {
   qrPosition: "bottom-right",
   qrSize: "small",
   showBusinessMarker: false,
+  showBusinessName: true,
   brandPrimary: "#1E3A5F",
   brandSecondary: "#FFFFFF",
   brandAccent: "#4A90D9",

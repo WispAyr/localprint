@@ -36,7 +36,7 @@ export async function drawBusinessBranding(
   }
 
   // ── Business Name ──
-  if (branding.businessName.trim()) {
+  if (branding.businessName.trim() && (branding as any).showBusinessName !== false) {
     const fontSize = 50 * dimScale;
     ctx.fillStyle = textColor;
     ctx.textAlign = "center";
