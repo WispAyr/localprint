@@ -96,6 +96,31 @@ export async function drawMarkersOnCanvas(
       }
 
       ctx.drawImage(image, imageX, imageY, imageSize, imageSize);
+
+      // Draw marker label text
+      const labelText = marker.title || marker.label || "";
+      if (labelText) {
+        const labelX = x + imageSize / 2 + 4 * Math.max(scaleX, scaleY);
+        const labelY = y;
+        const fontSize = Math.max(10, 11 * Math.max(scaleX, scaleY) * sizeScale);
+
+        ctx.save();
+        ctx.font = `700 ${fontSize}px "Space Grotesk", sans-serif`;
+        ctx.fillStyle = marker.color;
+        ctx.textBaseline = "middle";
+        ctx.shadowColor = "rgba(0,0,0,0.8)";
+        ctx.shadowBlur = 3 * Math.max(scaleX, scaleY);
+        ctx.fillText(labelText, labelX, labelY - (marker.day ? fontSize * 0.4 : 0));
+
+        if (marker.day && marker.time) {
+          const subFontSize = fontSize * 0.75;
+          ctx.font = `500 ${subFontSize}px "Space Grotesk", sans-serif`;
+          ctx.globalAlpha = 0.85;
+          ctx.fillText(`${marker.day.slice(0,3)} ${marker.time}`, labelX, labelY + fontSize * 0.5);
+          ctx.globalAlpha = 1;
+        }
+        ctx.restore();
+      }
     }),
   );
 }

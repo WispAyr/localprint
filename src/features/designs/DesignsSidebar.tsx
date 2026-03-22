@@ -53,8 +53,24 @@ export function useDesignLoader() {
       dispatch({ type: "SET_MARKER_DEFAULTS", defaults: s.markerDefaults });
     }
 
-    if (s.businessBranding) {
-      dispatch({ type: "SET_BUSINESS_BRANDING", changes: s.businessBranding });
+    // Load business branding - handle both key names from DB
+    const biz = s.businessBranding || s.business;
+    if (biz) {
+      const changes: Record<string, unknown> = { ...biz };
+      // Convert logoUrl path to logoDataUrl if needed
+      if (biz.logoUrl && !biz.logoDataUrl) {
+        try {
+          const resp = await fetch(biz.logoUrl);
+          const blob = await resp.blob();
+          const reader = new FileReader();
+          const dataUrl = await new Promise<string>((resolve) => {
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.readAsDataURL(blob);
+          });
+          changes.logoDataUrl = dataUrl;
+        } catch { /* ignore logo load failure */ }
+      }
+      dispatch({ type: "SET_BUSINESS_BRANDING", changes });
     }
 
     if (s.customMarkerIcons) {

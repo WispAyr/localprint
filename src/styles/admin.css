@@ -616,3 +616,30 @@ button.designs-sidebar-toggle.is-active {
     display: none !important;
   }
 }
+
+/* Marker labels on map preview */
+.poster-marker-label {
+  position: absolute;
+  left: calc(var(--marker-size, 24px) + 4px);
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8), 0 0 6px rgba(0,0,0,0.6);
+}
+
+.poster-marker-label-title {
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.poster-marker-label-time {
+  font-size: 8px;
+  font-weight: 500;
+  opacity: 0.85;
+  line-height: 1.2;
+}

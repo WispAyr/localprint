@@ -493,6 +493,14 @@ export default function MarkerOverlay({
           onTouchCancel={handleMarkerTouchEnd}
         >
           <MarkerVisual icon={icon} size={marker.size} color={marker.color} />
+          {(marker.title || marker.label) && (
+            <span className="poster-marker-label" style={{ color: marker.color }}>
+              <span className="poster-marker-label-title">{marker.title || marker.label}</span>
+              {marker.day && marker.time && (
+                <span className="poster-marker-label-time">{marker.day.slice(0,3)} {marker.time}</span>
+              )}
+            </span>
+          )}
         </div>
       ))}
     </div>
